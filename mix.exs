@@ -40,6 +40,7 @@ defmodule ResumeScreener.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:journey, "~> 0.10.19"},
       {:phoenix, "~> 1.8.5"},
       {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.13"},

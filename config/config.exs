@@ -8,7 +8,7 @@
 import Config
 
 config :resume_screener,
-  ecto_repos: [ResumeScreener.Repo],
+  ecto_repos: [ResumeScreener.Repo, Journey.Repo],
   generators: [timestamp_type: :utc_datetime]
 
 # Configure the endpoint
