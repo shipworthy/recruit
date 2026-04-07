@@ -12,9 +12,7 @@ defmodule ResumeScreener.Application do
       ResumeScreener.Repo,
       {DNSCluster, query: Application.get_env(:resume_screener, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: ResumeScreener.PubSub},
-      # Start a worker by calling: ResumeScreener.Worker.start_link(arg)
-      # {ResumeScreener.Worker, arg},
-      # Start to serve requests, typically the last entry
+      {Nx.Serving, name: ResumeScreener.ResumeClassifier, serving: ResumeScreener.ResumeAnalysis.classifier_serving()},
       ResumeScreenerWeb.Endpoint
     ]
 
