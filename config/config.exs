@@ -7,6 +7,9 @@
 # General application configuration
 import Config
 
+config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
+config :nx, :default_backend, EXLA.Backend
+
 config :resume_screener,
   ecto_repos: [ResumeScreener.Repo, Journey.Repo],
   generators: [timestamp_type: :utc_datetime]
@@ -30,6 +33,10 @@ config :resume_screener, ResumeScreenerWeb.Endpoint,
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
 config :resume_screener, ResumeScreener.Mailer, adapter: Swoosh.Adapters.Local
+
+config :journey, :graphs, [
+  &ResumeScreener.Candidate.Graph.new/0
+]
 
 # Configure esbuild (the version is required)
 config :esbuild,
