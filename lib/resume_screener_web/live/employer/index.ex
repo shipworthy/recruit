@@ -69,9 +69,9 @@ defmodule ResumeScreenerWeb.Live.Employer.Index do
                   </span>
                 </div>
                 <div class="mb-1 text-xs text-zinc-400">
-                  {candidate.execution_id} · {format_submitted(candidate.submitted)}
+                  {format_submitted(candidate.submitted)}
                 </div>
-                <p :if={candidate.resume_summary} class="text-sm text-zinc-600 whitespace-pre-wrap">
+                <p :if={candidate.resume_summary} class="text-sm text-zinc-600 whitespace-pre-line">
                   {candidate.resume_summary}
                 </p>
                 <div class="flex items-center gap-3 mt-3">

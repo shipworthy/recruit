@@ -4,20 +4,20 @@ This is a Phoenix LiveView application that uses AI to screen job applications. 
 
 This application uses [Journey](https://hexdocs.pm/journey) durable workflows for orchestrating AI-powered computations with reactive dependencies and persistence.
 
-Here is the blog post that goes with this repo: [Building a Recruiting Portal with Elixir, LLMs, and Journey Durable Workflows](https://dev.to/markmark/building-a-recruiting-portal-with-elixir-llms-and-journey-durable-workflows-2p0e)
+Here is the blog post that goes with this repo: [Recruiting with AI and Elixir](https://dev.to/markmark/recruiting-with-ai-and-elixir-4cc5)
 
 ## The Candidate Workflow Graph
 
-The core of the application's logic is implemented in the candidate workflow graph [./lib/resume_screener/candidate_graph.ex](./lib/resume_screener/candidate_graph.ex)
+The core of the application's logic is implemented in the candidate workflow graph [./lib/resume_screener/candidate_graph.ex](./lib/resume_screener/candidate_graph.ex).
 
-The graph takes the resume and the job description (and the time of submission) as its inputs, and determines if the resume looks ok, and, if so, summarizes and scores it against the job description.
+The graph takes a resume and a job description (and the time of submission) as its inputs, and determines if the resume looks OK, and, if so, summarizes and scores it against the job description.
 
 To make this determination, it uses `facebook/bart-large-mnli` running in `bumblebee` to determine if the resume looks valid (a cheap computation), and it then uses `gemma3:4b` running in a local instance of Ollama for summarization and scoring (which are significantly more expensive computations).
 
 ## Prerequisites
 
 - **Elixir** 1.18+ / OTP 27+
-- **PostgreSQL** (two databases: app data + Journey state)
+- **PostgreSQL** (can run in a container)
 - **Ollama** running locally with the `gemma3:4b` model
 
 Start Postgres (if using Docker):
@@ -53,7 +53,7 @@ $ cd assets && npm install && cd ..
 $ mix phx.server
 ```
 
-Visit [localhost:4000](http://localhost:4000). The application is preceeded with a default job description. Click "Apply", upload a resume, and submit to watch the workflow execute. The employer page shows the list of submissions, and allows you to change the job description.
+Visit [localhost:4000](http://localhost:4000). The application is pre-seeded with a default job description. Click "Apply", upload a resume, and submit to watch the workflow execute. The employer page shows the list of submissions, and allows you to change the job description.
 
 ## Try It in IEx
 
@@ -90,6 +90,7 @@ The integration tests run 6 parameterized candidates against the job description
 
 ## References
 
+- Blog: [Recruiting with AI and Elixir](https://dev.to/markmark/recruiting-with-ai-and-elixir-4cc5)
 - Journey on Hex: https://hexdocs.pm/journey
 - Journey on GitHub: https://github.com/shipworthy/journey
 - Journey website: https://gojourney.dev

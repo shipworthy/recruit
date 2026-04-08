@@ -90,9 +90,16 @@ defmodule ResumeScreener.ResumeAnalysis do
     """
 
     text = ollama_generate(prompt, @score_system) |> String.trim()
-    score = parse_score(text)
-    Logger.info("match score computed for #{name}, #{score}")
-    {:ok, score}
+
+    case parse_score(text) do
+      {:ok, score} ->
+        Logger.info("match score computed for #{name}, #{score}")
+        {:ok, score}
+
+      {:error, reason} ->
+        Logger.warning("match score parse failed for #{name}: #{reason}")
+        {:error, reason}
+    end
   end
 
   defp ollama_generate(prompt, system) do
@@ -109,8 +116,8 @@ defmodule ResumeScreener.ResumeAnalysis do
 
   defp parse_score(text) do
     case Regex.run(~r/\d+/, text) do
-      [num] -> num |> String.to_integer() |> min(100) |> max(0)
-      _ -> 50
+      [num] -> {:ok, num |> String.to_integer() |> min(100) |> max(0)}
+      _ -> {:error, "could not parse score from LLM response: #{inspect(text)}"}
     end
   end
 

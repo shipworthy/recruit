@@ -94,7 +94,7 @@ defmodule ResumeScreenerWeb.Live.Candidate.Index do
           </summary>
           <div
             id="job-description"
-            class="px-4 py-2 border-t border-zinc-300 bg-zinc-100 text-sm text-zinc-900 whitespace-pre-wrap rounded-b-lg"
+            class="px-4 py-2 border-t border-zinc-300 bg-zinc-100 text-sm text-zinc-900 whitespace-pre-line rounded-b-lg"
           >
             {@employer_values[:job_description]}
           </div>

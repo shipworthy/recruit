@@ -36,7 +36,7 @@ config :resume_screener, ResumeScreener.Mailer, adapter: Swoosh.Adapters.Local
 
 config :journey, :graphs, [
   &ResumeScreener.Candidate.Graph.new/0,
-  &ResumeScreener.Employee.Graph.new/0
+  &ResumeScreener.Employer.Graph.new/0
 ]
 
 # Configure esbuild (the version is required)
