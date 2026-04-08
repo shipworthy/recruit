@@ -65,7 +65,6 @@ defmodule ResumeScreener.Candidate.Graph do
   end
 
   def is_resume_valid(%{resume: resume}) do
-    Logger.info("checking resume validity.")
     ResumeScreener.ResumeAnalysis.is_resume_valid(resume)
   end
 
