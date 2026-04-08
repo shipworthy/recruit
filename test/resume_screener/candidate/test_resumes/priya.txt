@@ -1,0 +1,28 @@
+PRIYA SHARMA
+priya.sharma@example.com | New York, NY | github.com/psharma-ml
+
+SUMMARY
+Machine Learning Engineer with 6 years of experience building and deploying predictive models and NLP pipelines. Expert in transforming raw data into actionable business intelligence.
+
+TECHNICAL SKILLS
+- AI/ML: PyTorch, TensorFlow, Scikit-learn, Hugging Face Transformers
+- Languages: Python, R, SQL, Julia
+- Data Engineering: Pandas, Spark, Airflow, Snowflake
+- Deployment: FastAPI, Docker, AWS SageMaker
+
+PROFESSIONAL EXPERIENCE
+Cognitive Insights AI | Senior ML Engineer | 2021 – Present
+- Developed a Large Language Model (LLM) fine-tuning pipeline that improved customer sentiment analysis accuracy by 25%.
+- Built a recommendation engine using collaborative filtering that increased user engagement by 15% for a Top 500 e-commerce client.
+- Led the transition from manual model training to automated MLOps using Kubeflow.
+
+DataBridge Analytics | Data Scientist | 2018 – 2021
+- Designed and implemented a fraud detection system using Random Forests and XGBoost, identifying $2M+ in potential annual losses.
+- Automated data cleaning processes, reducing the data preparation lifecycle by 40%.
+
+EDUCATION
+M.S. in Data Science | Columbia University
+B.S. in Statistics | Indian Institute of Technology (IIT), Delhi
+
+PUBLICATIONS
+- "Optimization of Neural Networks in Low-Latency Environments," Journal of AI Research, 2022.

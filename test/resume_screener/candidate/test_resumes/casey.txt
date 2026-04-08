@@ -1,0 +1,23 @@
+CASEY RIOS
+casey.rios@example.com | Remote | 555-0102
+
+SUMMARY
+Mobile Developer with 4 years of experience building cross-platform and native applications. Passionate about UI/UX and mobile performance optimization.
+
+SKILLS
+- Frameworks: React Native, Flutter, Swift
+- State Management: Redux, MobX, Provider
+- APIs: Firebase, GraphQL, REST
+
+WORK HISTORY
+AppVenture Studio | Mobile Engineer | 2021 – Present
+- Developed and launched 3 React Native apps currently available on iOS and Android stores.
+- Integrated Firebase Authentication and Cloud Messaging for real-time user notifications.
+- Achieved a 4.8-star average rating across all managed applications.
+
+PixelPerfect Apps | Junior Developer | 2019 – 2021
+- Assisted in the development of a Flutter-based e-commerce app.
+- Managed bug tracking and performance monitoring using Sentry and Firebase Analytics.
+
+EDUCATION
+B.S. in Information Technology | Georgia Institute of Technology

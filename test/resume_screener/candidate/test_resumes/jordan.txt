@@ -1,0 +1,24 @@
+JORDAN SMITH
+jordan.smith@example.com | San Francisco, CA | github.com/jsmith-dev
+
+SUMMARY
+Senior Software Engineer with 8+ years of experience specializing in scalable web applications and distributed systems. Expert in React, Node.js, and AWS architecture.
+
+TECHNICAL SKILLS
+- Languages: JavaScript (ES6+), TypeScript, Python, Go
+- Frameworks: React, Redux, Node.js, Express, Next.js
+- Infrastructure: AWS (EC2, S3, Lambda), Docker, Kubernetes, Terraform
+- Databases: PostgreSQL, MongoDB, Redis
+
+PROFESSIONAL EXPERIENCE
+TechStream Solutions | Lead Software Engineer | 2020 – Present
+- Architected a microservices-based video streaming platform serving 500k+ active users.
+- Reduced cloud infrastructure costs by 30% through strategic implementation of AWS Lambda and auto-scaling groups.
+- Mentored a team of 6 junior and mid-level developers, conducting weekly code reviews.
+
+DataFlow Inc. | Full-Stack Developer | 2016 – 2020
+- Built and maintained real-time data visualization dashboards using React and D3.js.
+- Optimized database queries, reducing API response times by 45%.
+
+EDUCATION
+B.S. in Computer Science | University of California, Berkeley

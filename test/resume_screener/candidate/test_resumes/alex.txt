@@ -1,0 +1,20 @@
+ALEX CHEN
+alex.chen@example.com | Austin, TX | linkedin.com/in/alechen
+
+SKILLS
+Backend: Java, Spring Boot, Microservices, REST APIs
+Data: SQL, NoSQL, Apache Kafka, Elasticsearch
+Tools: Git, Jenkins, Maven, Docker
+
+EXPERIENCE
+CloudScale Systems | Senior Backend Engineer | 2019 – Present
+- Led the migration of a monolithic Java legacy system to a Spring Boot microservices architecture.
+- Developed a high-throughput messaging system using Kafka to handle 10k events per second.
+- Improved CI/CD pipeline efficiency by 50% using Jenkins and automated testing suites.
+
+CoreLogic Soft | Software Developer | 2017 – 2019
+- Developed backend services for a financial reporting tool using Java and Hibernate.
+- Collaborated with QA teams to ensure 95% code coverage through Unit and Integration testing.
+
+EDUCATION
+M.S. in Software Engineering | University of Texas at Austin

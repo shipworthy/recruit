@@ -1,0 +1,20 @@
+TAYLOR VANCE
+taylor.vance@example.com | Seattle, WA | 555-0199
+
+OBJECTIVE
+Motivated Computer Science graduate with strong foundations in Python and C++. Seeking an entry-level Software Engineer role to contribute to innovative software solutions.
+
+TECHNICAL SKILLS
+- Languages: Python, Java, C++, SQL
+- Web: HTML/CSS, Flask, Bootstrap
+- Tools: VS Code, Git, PyTest
+
+PROJECTS
+OpenSource Contribution - TaskManager | 2023
+- Contributed to an open-source task management tool, fixing 15+ bugs and implementing a new "Reminders" feature using Python and SQLite.
+Personal Portfolio Website | 2023
+- Designed a responsive personal site using HTML, CSS, and Flask; deployed via Heroku.
+
+EDUCATION
+B.A. in Computer Science | University of Washington | GPA: 3.8/4.0
+Graduated: May 2023
