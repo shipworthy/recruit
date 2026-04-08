@@ -17,7 +17,10 @@ defmodule ResumeScreenerWeb.Router do
   scope "/", ResumeScreenerWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", Live.Candidate.Index
+    live "/candidate/:execution_id", Live.Candidate.Index
+    get "/candidate/:execution_id/resume", ResumeController, :download
+    live "/employer", Live.Employer.Index
   end
 
   # Other scopes may use custom stacks.

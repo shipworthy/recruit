@@ -80,8 +80,8 @@ config :resume_screener, ResumeScreenerWeb.Endpoint,
 # Enable dev routes for dashboard and mailbox
 config :resume_screener, dev_routes: true
 
-# Do not include metadata nor timestamps in development logs
-config :logger, :default_formatter, format: "[$level] $message\n"
+# Include timestamps in development logs
+config :logger, :default_formatter, format: "$time [$level] $message\n"
 config :journey, log_level: :warning
 
 # Set a higher stacktrace during development. Avoid configuring such
