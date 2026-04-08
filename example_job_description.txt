@@ -1,0 +1,73 @@
+About the job
+Who We Are:
+
+Kelvin is a New York based start-up that is solving a 100-year-old problem: the lack of heating and cooling efficiency and comfort in buildings across the planet; causing enormous amounts of waste in both energy costs and carbon pollution. Our solution uses software, hardware, and data science to solve this problem in a cost effective way. We allow building owners and co-op boards to avoid the waste and the impending fines by giving them a solution that makes sense economically, practically, and environmentally.
+
+
+
+Our award-winning technology has received recognition by the MIT Clean Energy Prize, the Popular Science Invention Award, Architizer A+ Award, and more. Our solution has been validated by NYSERDA to save 25% on heating costs and are eligible for all utility incentives. Our hybrid-electrification platform will soon enable buildings to electrify up to 80% of their heating demand at 20% of the cost of traditional approaches.
+
+
+
+We are a growing team, with a diverse set of responsibilities and backgrounds. Kelvin is committed to creating a place where everyone’s unique perspective is valued and where people can do their best work. We work hard as a team to innovate, deliver great value to our customers, and create a positive, productive place to work every day.
+
+
+
+About the Principal Software Engineering Position:
+
+We are looking for an experienced, hands-on Principal Software Engineer that has 14+ years of application development experience to include professional experience with Elixir.  The Principal Software Engineer drives critical projects to the finish line, levels up team members, drives best practices, and communicates key design decisions.
+
+
+
+What You’ll Do
+
+Solve our toughest challenges and drive forward our most critical projects; Breakdown complexity into smaller pieces and parts
+Unblock team members by identifying key dependencies, calling out risks and issues early, supporting team members when blocked, and promoting best practices
+Mentor team members through code reviews, technical designs, and group learning sessions
+Maintain high standards for quality, security, and reliability of our solutions
+Communicate key design decisions and influence best practices, ensuring we are getting to a good decision as quickly as possible
+Influence hiring needs and decisions on candidate selection
+
+
+What You’ll Need:
+
+Bachelor’s degree or higher in Software Engineering or related field
+14+ years of software development experience 
+Flexibility, curiosity, positive attitude, and the ability to think outside of the box
+Passion for building high-quality software; building in quality from the start
+Flexibility to move quickly with a focus on the customer
+Strong experience working on production-level code with Elixir
+Strong problem solving skills
+
+
+Who You Are:
+
+Excited about the opportunities and benefits of working in a lean startup environment working with IoT, Cloud Computing, and Big Data.
+Desire to dive in and learn in a fast-paced organization.
+Enthusiastic, professional, and highly proactive.
+Thrive on finding efficient solutions to ambiguous problems.
+Collaborative team player who can also work with minimal direction.
+Able to perform under pressure and deliver results in a fast-paced environment that requires fresh thinking and innovation.
+
+
+What We Offer:
+
+Competitive salary and equitable compensation
+Generous Benefits Package
+Company Equity
+Paid holidays and flexible paid-time-off
+All the gear you need to work smart
+
+
+Kelvin is committed to fostering, cultivating and preserving a culture of diversity and inclusion. We continue to hire without regard to race, ancestry, place or origin, color, ethnic origin, citizenship, creed, religion, gender identity, sexual orientation, age, marital status, same-sex partnership status, family status, or disability.
+
+
+
+
+
+
+Requirements added by the job poster
+
+• 11+ years of experience in Engineering
+
+• 4+ years of work experience with Elixir

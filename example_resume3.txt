@@ -1,0 +1,34 @@
+MORGAN ELIX
+morgan.elix@example.com | Chicago, IL | github.com/m-elix-pro
+
+SUMMARY
+Staff Software Engineer with over 12 years of experience, specializing in functional programming and highly concurrent distributed systems. Expert in Elixir, Erlang, and the Phoenix framework for building fault-tolerant applications.
+
+TECHNICAL SKILLS
+- Languages: Elixir, Erlang, Ruby, SQL, Rust
+- Frameworks: Phoenix, Absinthe (GraphQL), Nerves (IoT), Ruby on Rails
+- Specialized: OTP (GenServer, Supervisor, Registry), Ecto, LiveView
+- Infrastructure: RabbitMQ, PostgreSQL, Docker, AWS, Fly.io
+
+PROFESSIONAL EXPERIENCE
+SignalFlow Communications | Staff Engineer | 2019 – Present
+- Lead architect for a real-time messaging engine built entirely in Elixir/OTP, supporting 1M+ concurrent WebSocket connections.
+- Implemented a custom distributed caching layer using ETS and Mnesia, reducing database load by 60%.
+- Integrated Rust via NIFs (Native Implemented Functions) to optimize heavy computational tasks within the Elixir environment.
+- Mentored 15+ developers in the transition from Ruby to Elixir.
+
+FinTech Global | Senior Backend Engineer | 2015 – 2019
+- Built a high-availability transaction processing system using Elixir and the Phoenix framework.
+- Utilized Broadway for multi-stage data ingestion and processing pipelines from SQS and Kafka.
+- Reduced system downtime to 99.999% ("five nines") by leveraging the "let it crash" philosophy and robust Supervision trees.
+
+WebStack Solutions | Ruby on Rails Developer | 2012 – 2015
+- Developed and maintained monolithic Rails applications for various e-commerce clients.
+- Managed PostgreSQL database migrations and performance tuning.
+
+EDUCATION
+B.S. in Computer Science | Illinois Institute of Technology
+
+CERTIFICATIONS & OPEN SOURCE
+- Contributor to the Elixir core Hex packages
+- Speaker at ElixirConf (2022): "Scaling Phoenix Channels for Global Traffic"
