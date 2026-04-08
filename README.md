@@ -1,18 +1,95 @@
-# ResumeScreener
+# Recruit: AI-Powered Resume Screening with Journey Durable Workflows
 
-To start your Phoenix server:
+This is a Phoenix LiveView application that uses AI to screen job applications. Candidates upload resumes, and the system validates them, summarizes qualifications, and computes a match score against the job description.
 
-* Run `mix setup` to install and setup dependencies
-* Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+This application uses [Journey](https://hexdocs.pm/journey) durable workflows for orchestrating AI-powered computations with reactive dependencies and persistence.
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Here is the blog post that goes with this repo: [Building a Recruiting Portal with Elixir, LLMs, and Journey Durable Workflows](https://dev.to/markmark/building-a-recruiting-portal-with-elixir-llms-and-journey-durable-workflows-2p0e)
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+## The Candidate Workflow Graph
 
-## Learn more
+The core of the application's logic is implemented in the candidate workflow graph [./lib/resume_screener/candidate_graph.ex](./lib/resume_screener/candidate_graph.ex)
 
-* Official website: https://www.phoenixframework.org/
-* Guides: https://hexdocs.pm/phoenix/overview.html
-* Docs: https://hexdocs.pm/phoenix
-* Forum: https://elixirforum.com/c/phoenix-forum
-* Source: https://github.com/phoenixframework/phoenix
+The graph takes the resume and the job description (and the time of submission) as its inputs, and determines if the resume looks ok, and, if so, summarizes and scores it against the job description.
+
+To make this determination, it uses `facebook/bart-large-mnli` running in `bumblebee` to determine if the resume looks valid (a cheap computation), and it then uses `gemma3:4b` running in a local instance of Ollama for summarization and scoring (which are significantly more expensive computations).
+
+## Prerequisites
+
+- **Elixir** 1.18+ / OTP 27+
+- **PostgreSQL** (two databases: app data + Journey state)
+- **Ollama** running locally with the `gemma3:4b` model
+
+Start Postgres (if using Docker):
+```
+$ docker run --rm --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres:16
+```
+
+Install and run Ollama with the required model:
+```
+$ ollama pull gemma3:4b
+$ ollama serve
+```
+
+Verify Ollama is working:
+```
+$ curl -s http://localhost:11434/api/generate \
+    -d '{"model":"gemma3:4b","prompt":"Capital of Argentina? Just the city name.","stream":false}'
+{..., "response": "Buenos Aires", ...}
+```
+
+## Setup
+
+```
+$ mix deps.get
+$ mix ecto.create
+$ mix ecto.migrate
+$ cd assets && npm install && cd ..
+```
+
+## Run the Web Application
+
+```
+$ mix phx.server
+```
+
+Visit [localhost:4000](http://localhost:4000). The application is preceeded with a default job description. Click "Apply", upload a resume, and submit to watch the workflow execute. The employer page shows the list of submissions, and allows you to change the job description.
+
+## Try It in IEx
+
+```elixir
+$ iex -S mix
+
+iex(1)> candidate = ResumeScreener.Candidate.Graph.new() |> Journey.start(); :ok
+iex(2)> Journey.set(candidate, :job_description, File.read!("example_job_description.txt")); :ok
+iex(3)> Journey.set(candidate, :resume, File.read!("example_resume1.txt")); :ok
+iex(4)> Journey.set(candidate, :submitted, System.os_time(:second)); :ok
+iex(5)> {:ok, resume_valid?, _revision} = Journey.get(candidate, :resume_valid, wait: :any); resume_valid?
+false
+iex(6)> {:ok, resume, _revision} = Journey.get(candidate, :resume, wait: :any); resume
+"zap barometer zap zap\n"
+```
+
+Oh sorry, this is not a real resume! Try `example_resume2.txt` or `example_resume3.txt`!
+
+Also check out the blog for a walkthrough.
+
+## Tests
+
+Run the fast tests (no Ollama required):
+```
+$ mix test
+```
+
+Run the full integration suite (requires Ollama running with `gemma3:4b`, on http://localhost:11434):
+```
+$ mix test --include integration
+```
+
+The integration tests run 6 parameterized candidates against the job description and verify match scores fall within expected ranges.
+
+## References
+
+- Journey on Hex: https://hexdocs.pm/journey
+- Journey on GitHub: https://github.com/shipworthy/journey
+- Journey website: https://gojourney.dev
