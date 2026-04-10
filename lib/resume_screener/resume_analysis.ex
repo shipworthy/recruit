@@ -103,15 +103,26 @@ defmodule ResumeScreener.ResumeAnalysis do
   end
 
   defp ollama_generate(prompt, system) do
-    Req.post!("http://localhost:11434/api/generate",
-      json: %{
-        model: "gemma3:4b",
-        prompt: prompt,
-        system: system,
-        stream: false
-      },
-      receive_timeout: 120_000
-    ).body["response"]
+    model = "gemma3:4b"
+    Logger.info("calling ollama with model: #{model}")
+    start_time = System.monotonic_time()
+
+    response =
+      Req.post!("http://localhost:11434/api/generate",
+        json: %{
+          model: model,
+          prompt: prompt,
+          system: system,
+          stream: false
+        },
+        receive_timeout: 120_000
+      ).body["response"]
+
+    end_time = System.monotonic_time()
+    duration = System.convert_time_unit(end_time - start_time, :native, :millisecond) / 1000.0
+    Logger.info("ollama call completed in #{Float.round(duration, 2)}s")
+
+    response
   end
 
   defp parse_score(text) do
