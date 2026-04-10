@@ -20,15 +20,25 @@ To make this determination, it uses `facebook/bart-large-mnli` running in `bumbl
 - **PostgreSQL** (can run in a container)
 - **Ollama** running locally with the `gemma3:4b` model
 
+## Hardware and Performance
+
+On an **Apple M1 Max (32GB RAM)**, a full candidate analysis (validation, scoring, and summarization) typically completes in **under 30 seconds** using `gemma3:4b`.
+
+Performance on other hardware will vary based on GPU/Neural Engine capabilities and available memory.
+
+## Running Postgres in Docker
+
 Start Postgres (if using Docker):
 ```
 $ docker run --rm --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres:16
 ```
 
+## Running Ollama
+
 Install and run Ollama with the required model:
 ```
 $ ollama pull gemma3:4b
-$ ollama serve
+$ ollama serve  # may fail if Ollama is already listening
 ```
 
 Verify Ollama is working:
@@ -37,6 +47,12 @@ $ curl -s http://localhost:11434/api/generate \
     -d '{"model":"gemma3:4b","prompt":"Capital of Argentina? Just the city name.","stream":false}'
 {..., "response": "Buenos Aires", ...}
 ```
+
+A note on Ollama concurrency:
+
+In the [candidate Journey graph](./lib/resume_screener/candidate_graph.ex), the scoring and summarization nodes (`:match_score` and `:resume_summary`) are independent and are computed in parallel. However, you may still see them complete "sequentially" because, by default, **Ollama serializes processing** of heavy inference requests.
+
+For configuring Ollama to process requests in parallel, please reference Ollama documentation (hint: `OLLAMA_NUM_PARALLEL`).
 
 ## Setup
 
