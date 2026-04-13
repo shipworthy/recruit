@@ -24,7 +24,7 @@ defmodule ResumeScreenerWeb.Live.Candidate.Index do
         |> assign(:values, values)
         |> assign(:computation_states, computation_states(execution_id))
         |> assign(:introspect, Journey.Tools.introspect(execution_id))
-        |> assign(:graph_mermaid, generate_mermaid())
+        |> assign(:graph_mermaid, generate_mermaid_execution(execution_id))
         |> assign(:employer_values, employer_values)
         |> assign(:mermaid_tab, "visual")
         |> allow_upload(:resume,
@@ -173,6 +173,53 @@ defmodule ResumeScreenerWeb.Live.Candidate.Index do
             {if @values[:submitted], do: "New Application", else: "Cancel Application"}
           </button>
         </div>
+        <div :if={@graph_mermaid} class="mt-4 w-full rounded-lg border border-zinc-300 overflow-hidden">
+          <div class="flex border-b border-zinc-300 bg-zinc-50">
+            <button
+              type="button"
+              phx-click="mermaid-tab"
+              phx-value-tab="visual"
+              class={[
+                "px-4 py-2 text-xs font-semibold transition-colors",
+                if(@mermaid_tab == "visual",
+                  do: "bg-white text-zinc-900 border-b-2 border-zinc-900",
+                  else: "text-zinc-500 hover:text-zinc-700"
+                )
+              ]}
+            >
+              Visual
+            </button>
+            <button
+              type="button"
+              phx-click="mermaid-tab"
+              phx-value-tab="text"
+              class={[
+                "px-4 py-2 text-xs font-semibold transition-colors",
+                if(@mermaid_tab == "text",
+                  do: "bg-white text-zinc-900 border-b-2 border-zinc-900",
+                  else: "text-zinc-500 hover:text-zinc-700"
+                )
+              ]}
+            >
+              Text
+            </button>
+          </div>
+          <div
+            :if={@mermaid_tab == "visual"}
+            id={"mermaid-#{:erlang.phash2(@graph_mermaid)}"}
+            phx-hook=".Mermaid"
+            phx-update="ignore"
+            data-graph={@graph_mermaid}
+            class="bg-white p-4 overflow-x-auto"
+          >
+          </div>
+          <pre
+            :if={@mermaid_tab == "text"}
+            id="mermaid-graph"
+            class="bg-zinc-100 p-4 text-xs text-zinc-700 overflow-x-auto"
+          ><span class="text-zinc-400">iex&gt; Journey.Tools.generate_mermaid_execution("{@execution_id}") |&gt; IO.puts()
+        </span>{@graph_mermaid}</pre>
+        </div>
         <p :if={@values[:submitted]} class="text-sm font-semibold text-green-700">
           Application submitted
         </p>
@@ -219,53 +266,6 @@ defmodule ResumeScreenerWeb.Live.Candidate.Index do
           class="mt-8 w-full rounded-lg border border-zinc-300 bg-zinc-100 p-4 text-xs text-zinc-700 overflow-x-auto"
         ><span class="text-zinc-400">iex&gt; Journey.Tools.introspect("{@execution_id}")
     </span>{@introspect}</pre>
-        <div :if={@graph_mermaid} class="mt-4 w-full rounded-lg border border-zinc-300 overflow-hidden">
-          <div class="flex border-b border-zinc-300 bg-zinc-50">
-            <button
-              type="button"
-              phx-click="mermaid-tab"
-              phx-value-tab="visual"
-              class={[
-                "px-4 py-2 text-xs font-semibold transition-colors",
-                if(@mermaid_tab == "visual",
-                  do: "bg-white text-zinc-900 border-b-2 border-zinc-900",
-                  else: "text-zinc-500 hover:text-zinc-700"
-                )
-              ]}
-            >
-              Visual
-            </button>
-            <button
-              type="button"
-              phx-click="mermaid-tab"
-              phx-value-tab="text"
-              class={[
-                "px-4 py-2 text-xs font-semibold transition-colors",
-                if(@mermaid_tab == "text",
-                  do: "bg-white text-zinc-900 border-b-2 border-zinc-900",
-                  else: "text-zinc-500 hover:text-zinc-700"
-                )
-              ]}
-            >
-              Text
-            </button>
-          </div>
-          <div
-            :if={@mermaid_tab == "visual"}
-            id="mermaid-container"
-            phx-hook=".Mermaid"
-            phx-update="ignore"
-            data-graph={@graph_mermaid}
-            class="bg-white p-4 overflow-x-auto"
-          >
-          </div>
-          <pre
-            :if={@mermaid_tab == "text"}
-            id="mermaid-graph"
-            class="bg-zinc-100 p-4 text-xs text-zinc-700 overflow-x-auto"
-          ><span class="text-zinc-400">iex&gt; ResumeScreener.Candidate.Graph.new() |&gt; Journey.Tools.generate_mermaid_graph() |&gt; IO.puts()
-        </span>{@graph_mermaid}</pre>
-        </div>
         <script :type={Phoenix.LiveView.ColocatedHook} name=".Mermaid">
           import mermaid from "mermaid"
 
@@ -274,7 +274,7 @@ defmodule ResumeScreenerWeb.Live.Candidate.Index do
           export default {
             async mounted() {
               const graph = this.el.dataset.graph
-              const { svg } = await mermaid.render("mermaid-svg", graph)
+              const { svg } = await mermaid.render("mermaid-svg-" + this.el.id, graph)
               this.el.innerHTML = svg
             }
           }
@@ -306,7 +306,7 @@ defmodule ResumeScreenerWeb.Live.Candidate.Index do
       |> assign(:execution_id, execution.id)
       |> assign(:values, Journey.values(execution))
       |> assign(:introspect, Journey.Tools.introspect(execution.id))
-      |> assign(:graph_mermaid, generate_mermaid())
+      |> assign(:graph_mermaid, generate_mermaid_execution(execution.id))
       |> push_patch(to: ~p"/candidate/#{execution.id}")
 
     {:noreply, socket}
@@ -413,6 +413,7 @@ defmodule ResumeScreenerWeb.Live.Candidate.Index do
       |> assign(:values, Journey.values(execution))
       |> assign(:computation_states, computation_states(eid))
       |> assign(:introspect, Journey.Tools.introspect(eid))
+      |> assign(:graph_mermaid, generate_mermaid_execution(eid))
     else
       socket
     end
@@ -424,9 +425,8 @@ defmodule ResumeScreenerWeb.Live.Candidate.Index do
         do: {node, Journey.Tools.computation_state(execution_id, node)}
   end
 
-  defp generate_mermaid do
-    ResumeScreener.Candidate.Graph.new()
-    |> Journey.Tools.generate_mermaid_graph()
+  defp generate_mermaid_execution(execution_id) do
+    Journey.Tools.generate_mermaid_execution(execution_id, include_legend: false)
   end
 
   defp sanitize_text(text) do
