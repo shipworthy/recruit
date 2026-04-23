@@ -55,7 +55,6 @@ defmodule ResumeScreenerWeb.Live.Candidate.Index do
     socket =
       socket
       |> assign(:execution_id, nil)
-      |> assign(:not_found, false)
       |> assign(:values, %{})
       |> assign(:computation_states, %{})
       |> assign(:introspect, nil)
@@ -82,7 +81,6 @@ defmodule ResumeScreenerWeb.Live.Candidate.Index do
         <h1 class="text-3xl font-bold text-zinc-900">Welcome, Candidate!</h1>
         <details
           :if={@employer_values[:job_description]}
-          open={is_nil(@execution_id)}
           class="group w-full rounded-lg border border-zinc-300"
         >
           <summary class="cursor-pointer flex items-center gap-2 px-4 py-2 list-none [&::-webkit-details-marker]:hidden">
@@ -99,36 +97,26 @@ defmodule ResumeScreenerWeb.Live.Candidate.Index do
             {@employer_values[:job_description]}
           </div>
         </details>
-        <button
-          :if={is_nil(@execution_id)}
-          id="get-started-btn"
-          phx-click="get-started"
-          class="rounded-lg bg-zinc-900 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-zinc-700 active:bg-zinc-800 transition-colors"
-        >
-          Apply
-        </button>
-        <div :if={@execution_id} class="w-full">
+        <div class="w-full">
           <form id="upload-form" phx-change="validate-upload">
-            <.live_file_input upload={@uploads.resume} class="hidden" />
+            <.live_file_input upload={@uploads.resume} disabled={@values[:submitted]} class="hidden" />
             <label
-              :if={!@values[:resume] && !@values[:submitted]}
               for={@uploads.resume.ref}
-              class="inline-block cursor-pointer rounded-lg bg-zinc-900 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-zinc-700 active:bg-zinc-800 transition-colors"
+              class={[
+                "inline-block rounded-lg px-6 py-3 text-sm font-semibold shadow-sm transition-colors",
+                if(@values[:submitted],
+                  do: "bg-zinc-300 text-zinc-500 cursor-not-allowed pointer-events-none",
+                  else: "cursor-pointer bg-zinc-900 text-white hover:bg-zinc-700 active:bg-zinc-800"
+                )
+              ]}
             >
               Upload Resume (.txt, .md)
             </label>
             <button
-              :if={@values[:resume]}
+              :if={@values[:resume] && !@values[:submitted]}
               type="button"
               phx-click="clear-resume"
-              disabled={@values[:submitted]}
-              class={[
-                "rounded-lg border border-zinc-300 px-6 py-3 text-sm font-semibold shadow-sm transition-colors",
-                if(@values[:submitted],
-                  do: "text-zinc-400 cursor-not-allowed",
-                  else: "text-zinc-700 hover:bg-zinc-100 active:bg-zinc-200"
-                )
-              ]}
+              class="rounded-lg border border-zinc-300 px-6 py-3 text-sm font-semibold text-zinc-700 shadow-sm hover:bg-zinc-100 active:bg-zinc-200 transition-colors"
             >
               Clear
             </button>
@@ -138,17 +126,20 @@ defmodule ResumeScreenerWeb.Live.Candidate.Index do
               </p>
             <% end %>
           </form>
-          <p :if={@values[:resume]} class="mt-2 text-sm text-green-600">
-            Resume uploaded
-          </p>
           <textarea
-            :if={!@values[:resume] && !@values[:submitted]}
             id="resume-paste"
-            phx-blur="set-resume-text"
-            placeholder="Or paste your resume here..."
+            phx-blur={if !@values[:submitted], do: "set-resume-text"}
+            readonly={@values[:submitted]}
+            placeholder="Paste your resume here..."
             rows="8"
-            class="mt-3 w-full rounded-lg border border-zinc-300 px-4 py-2 text-sm text-zinc-900 shadow-sm outline-none transition-colors focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500"
-          />
+            class={[
+              "mt-3 w-full rounded-lg border border-zinc-300 px-4 py-2 text-sm shadow-sm outline-none transition-colors",
+              if(@values[:submitted],
+                do: "bg-zinc-50 text-zinc-500 cursor-not-allowed",
+                else: "text-zinc-900 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500"
+              )
+            ]}
+          >{@values[:resume]}</textarea>
         </div>
         <div :if={@execution_id} class="flex items-center gap-3">
           <button
@@ -227,33 +218,69 @@ defmodule ResumeScreenerWeb.Live.Candidate.Index do
           <span class="text-sm text-zinc-500">resume_valid: </span>
           <%= case @computation_states[:resume_valid] do %>
             <% :success -> %>
-              <span class="text-sm font-medium text-zinc-900">✅ {inspect(@values[:resume_valid])}</span>
-            <% :computing -> %>
-              <span class="animate-pulse">⏳</span>
-            <% _ -> %>
-              <span class="text-sm text-zinc-400">⚪</span>
+              <span class="text-sm font-medium text-zinc-900">
+                ✅ :success | {inspect(@values[:resume_valid])}
+              </span>
+            <% :failed -> %>
+              <span class="text-sm text-zinc-500">❌ :failed</span>
+              <button
+                type="button"
+                phx-click="retry-computation"
+                phx-value-node="resume_valid"
+                class="ml-2 rounded-md border border-zinc-300 px-2 py-1 text-xs font-semibold text-zinc-700 hover:bg-zinc-100 active:bg-zinc-200 transition-colors"
+              >
+                try again
+              </button>
+            <% state -> %>
+              <span class="text-sm text-zinc-500">
+                {Journey.Tools.computation_state_to_text(state)}
+              </span>
           <% end %>
         </div>
         <div :if={@values[:submitted]} class="w-full rounded-lg border border-zinc-300 px-4 py-3">
           <span class="text-sm text-zinc-500">match_score: </span>
           <%= case @computation_states[:match_score] do %>
             <% :success -> %>
-              <span class="text-sm font-medium text-zinc-900">✅ {@values[:match_score]}</span>
-            <% :computing -> %>
-              <span class="animate-pulse">⏳</span>
-            <% _ -> %>
-              <span class="text-sm text-zinc-400">⚪</span>
+              <span class="text-sm font-medium text-zinc-900">
+                ✅ :success | {@values[:match_score]}
+              </span>
+            <% :failed -> %>
+              <span class="text-sm text-zinc-500">❌ :failed</span>
+              <button
+                type="button"
+                phx-click="retry-computation"
+                phx-value-node="match_score"
+                class="ml-2 rounded-md border border-zinc-300 px-2 py-1 text-xs font-semibold text-zinc-700 hover:bg-zinc-100 active:bg-zinc-200 transition-colors"
+              >
+                try again
+              </button>
+            <% state -> %>
+              <span class="text-sm text-zinc-500">
+                {Journey.Tools.computation_state_to_text(state)}
+              </span>
           <% end %>
         </div>
         <div :if={@values[:submitted]} class="w-full rounded-lg border border-zinc-300 px-4 py-3">
           <span class="text-sm text-zinc-500">resume_summary: </span>
           <%= case @computation_states[:resume_summary] do %>
             <% :success -> %>
-              <span class="text-sm font-medium text-zinc-900">✅ &lt;computed&gt;</span>
-            <% :computing -> %>
-              <span class="animate-pulse">⏳</span>
-            <% _ -> %>
-              <span class="text-sm text-zinc-400">⚪</span>
+              <span class="text-sm font-medium text-zinc-900">
+                ✅ :success | &lt;computed&gt;
+              </span>
+            <% :failed -> %>
+              <span class="text-sm text-zinc-500">❌ :failed</span>
+              <button
+                type="button"
+                phx-click="retry-computation"
+                phx-value-node="resume_summary"
+                class="ml-2 rounded-md border border-zinc-300 px-2 py-1 text-xs font-semibold text-zinc-700 hover:bg-zinc-100 active:bg-zinc-200 transition-colors"
+              >
+                try again
+              </button>
+            <% state -> %>
+              <span class="text-sm text-zinc-500">
+                {Journey.Tools.computation_state_to_text(state)}
+              </span>
           <% end %>
         </div>
         <div :if={@values[:resume_summary]} class="w-full rounded-lg border border-zinc-300 px-4 py-3">
@@ -285,30 +312,6 @@ defmodule ResumeScreenerWeb.Live.Candidate.Index do
   end
 
   def handle_params(_params, _uri, socket) do
-    {:noreply, socket}
-  end
-
-  def handle_event("get-started", _params, socket) do
-    graph = ResumeScreener.Candidate.Graph.new()
-    execution = Journey.start_execution(graph)
-
-    # Copy job_description from the employer singleton, if available
-    if socket.assigns.employer_values[:job_description] do
-      Journey.set(execution.id, :job_description, socket.assigns.employer_values[:job_description])
-    end
-
-    :ok = Phoenix.PubSub.subscribe(ResumeScreener.PubSub, "candidate:#{execution.id}")
-
-    Logger.info("get-started: created execution #{execution.id}")
-
-    socket =
-      socket
-      |> assign(:execution_id, execution.id)
-      |> assign(:values, Journey.values(execution))
-      |> assign(:introspect, Journey.Tools.introspect(execution.id))
-      |> assign(:graph_mermaid, generate_mermaid_execution(execution.id))
-      |> push_patch(to: ~p"/candidate/#{execution.id}")
-
     {:noreply, socket}
   end
 
@@ -348,17 +351,28 @@ defmodule ResumeScreenerWeb.Live.Candidate.Index do
     {:noreply, socket}
   end
 
+  def handle_event("retry-computation", %{"node" => node_name}, socket) do
+    node_atom = String.to_existing_atom(node_name)
+    Journey.Tools.retry_computation(socket.assigns.execution_id, node_atom)
+    Logger.info("retry-computation: #{socket.assigns.execution_id}, #{node_atom}")
+
+    socket =
+      socket
+      |> refresh_execution_state()
+      |> update(:computation_states, &Map.put(&1, node_atom, :computing))
+
+    {:noreply, socket}
+  end
+
   def handle_event("set-resume-text", %{"value" => text}, socket) do
     text = sanitize_text(text)
 
     if text != "" do
-      execution_id = socket.assigns.execution_id
-      Journey.set(execution_id, :resume, text)
+      socket = ensure_candidate_execution(socket)
+      Journey.set(socket.assigns.execution_id, :resume, text)
       Logger.info("set-resume-text: #{String.length(text)} chars")
 
-      socket = refresh_execution_state(socket)
-
-      {:noreply, socket}
+      {:noreply, refresh_execution_state(socket)}
     else
       {:noreply, socket}
     end
@@ -371,15 +385,33 @@ defmodule ResumeScreenerWeb.Live.Candidate.Index do
           {:ok, sanitize_text(File.read!(path))}
         end)
 
-      execution_id = socket.assigns.execution_id
-      Journey.set(execution_id, :resume, text)
+      socket = ensure_candidate_execution(socket)
+      Journey.set(socket.assigns.execution_id, :resume, text)
       Logger.info("upload-resume: #{entry.client_name}, #{String.length(text)} chars")
 
-      socket = refresh_execution_state(socket)
-
-      {:noreply, socket}
+      {:noreply, refresh_execution_state(socket)}
     else
       {:noreply, socket}
+    end
+  end
+
+  defp ensure_candidate_execution(socket) do
+    if socket.assigns.execution_id do
+      socket
+    else
+      execution = Journey.start_execution(ResumeScreener.Candidate.Graph.new())
+
+      if socket.assigns.employer_values[:job_description] do
+        Journey.set(execution.id, :job_description, socket.assigns.employer_values[:job_description])
+      end
+
+      :ok = Phoenix.PubSub.subscribe(ResumeScreener.PubSub, "candidate:#{execution.id}")
+
+      Logger.info("Created candidate execution #{execution.id}")
+
+      socket
+      |> assign(:execution_id, execution.id)
+      |> push_patch(to: ~p"/candidate/#{execution.id}")
     end
   end
 
