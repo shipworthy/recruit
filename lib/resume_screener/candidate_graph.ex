@@ -21,7 +21,7 @@ defmodule ResumeScreener.Candidate.Graph do
               {:submitted, &provided?/1}
             ]
           ),
-          &is_resume_valid/1
+          &f_is_resume_valid/1
         ),
         compute(
           :resume_summary,
@@ -32,7 +32,7 @@ defmodule ResumeScreener.Candidate.Graph do
               {:job_description, &provided?/1}
             ]
           ),
-          &summarize_resume/1,
+          &f_summarize_resume/1,
           abandon_after_seconds: 300
         ),
         compute(
@@ -44,7 +44,7 @@ defmodule ResumeScreener.Candidate.Graph do
               {:job_description, &provided?/1}
             ]
           ),
-          &compute_match_score/1,
+          &f_compute_match_score/1,
           abandon_after_seconds: 300
         ),
         input(:decision)
@@ -64,15 +64,15 @@ defmodule ResumeScreener.Candidate.Graph do
     )
   end
 
-  def is_resume_valid(%{resume: resume}) do
+  def f_is_resume_valid(%{resume: resume}) do
     ResumeScreener.ResumeAnalysis.is_resume_valid(resume)
   end
 
-  def summarize_resume(%{resume: resume, job_description: job_description}) do
+  def f_summarize_resume(%{resume: resume, job_description: job_description}) do
     ResumeScreener.ResumeAnalysis.summarize_resume(resume, job_description)
   end
 
-  def compute_match_score(%{resume: resume, job_description: job_description}) do
+  def f_compute_match_score(%{resume: resume, job_description: job_description}) do
     ResumeScreener.ResumeAnalysis.compute_match_score(resume, job_description)
   end
 end
